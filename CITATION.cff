@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "AI Agents for Nanoindentation (WG4)"
+abstract: >-
+  A LangGraph multi-agent system for autonomous, objective-driven
+  nanoindentation: hypothesis generation, literature retrieval, image-based
+  site targeting, measurement planning with human approval gates, and
+  analysis, with a built-in instrument simulator.
+authors:
+  - family-names: Nannory
+    given-names: Munireach
+    affiliation: "University of Tennessee, Knoxville"
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+license: MIT
+type: software
+# version: "1.0.0"
+# date-released: "2026-MM-DD"
+# repository-code: "https://github.com/<owner>/<repo>"
+keywords:
+  - nanoindentation
+  - autonomous experimentation
+  - multi-agent systems
+  - LangGraph
+  - materials characterization

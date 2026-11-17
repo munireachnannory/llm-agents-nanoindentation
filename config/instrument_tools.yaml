@@ -1,0 +1,179 @@
+# Machine-readable instrument command catalog for the agent planner.
+# Human reference: notebooks/1_AE_Nanoindentation_Agent_Reference.ipynb
+
+workflows:
+  macro_micro_alignment:
+    description: >
+      Standard autonomous workflow using macro-micro alignment, fine correction,
+      indentation setup, execution, and ReviewData export.
+    steps:
+      - change_method
+      - move_to_aligned_point
+      - capture_video_panel_remote
+      - starting_tests
+      - start_test_normal
+      - get_current_sample_and_test_ocr_passive
+      - process_review_file
+  relative_movement:
+    description: >
+      Workflow without macro-micro alignment: relative stage moves, microscope
+      verification, indentation, and ReviewData processing.
+    steps:
+      - move
+      - capture_video_panel_remote
+      - starting_tests
+      - start_test_normal
+      - get_current_sample_and_test_ocr_passive
+      - process_review_file
+
+decision_types:
+  move_to_location: "Move stage to a target (relative move or aligned point)"
+  setup_test: "Configure a new indentation test array"
+  run_test: "Start the configured indentation test"
+  capture_image: "Capture microscope/video panel for targeting or verification"
+  process_data: "Process ReviewData and export results"
+  align: "Focus plane or macro-micro alignment operations"
+  monitor: "Read instrument progress or state without changing UI"
+  conclude: "End the instrument cycle — no more actions this round"
+
+tools:
+  move:
+    description: "Perform relative XY stage movement in microns"
+    risk_level: low
+    parameters:
+      amount: { type: number, required: true, description: "Movement amount in microns" }
+      direction: { type: string, required: true, enum: [right, left, up, down] }
+      t: { type: number, default: 2, description: "UI wait time" }
+    notes: "Opens move-relative menu, types amount, clicks direction."
+
+  move_in_increments:
+    description: "Split a large relative move into smaller increments"
+    risk_level: low
+    parameters:
+      total_amount: { type: number, required: true }
+      direction: { type: string, required: true, enum: [right, left, up, down] }
+      increment: { type: number, default: 25 }
+    notes: "Use for moves larger than ~50 µm."
+
+  set_extension:
+    description: "Set Z extension via Z control panel"
+    risk_level: medium
+    parameters:
+      number: { type: number, required: true, description: "Extension value" }
+      t: { type: number, default: 2 }
+    notes: "Opens Z panel, sets engage value, waits for completion."
+
+  engage:
+    description: "Click engage button in Z control"
+    risk_level: medium
+    parameters: {}
+    notes: "Physical contact risk — use after positioning and focus."
+
+  change_method:
+    description: "Load or refresh the active indentation method on the instrument"
+    risk_level: low
+    parameters:
+      add: { type: integer, default: 1, description: "Add X/Y positions for some methods" }
+      method_dir: { type: string, required: false }
+      method_file_name: { type: string, required: false }
+    typical_next: [move, move_to_aligned_point, capture_video_panel_remote]
+    notes: "Often the first step in a new experiment area."
+
+  starting_tests:
+    description: "Create and configure a new indentation test with array settings"
+    risk_level: medium
+    parameters:
+      sample_name: { type: string, required: true }
+      setup: { type: object, required: true, description: "Method parameters (poisson, target load, etc.)" }
+      indents: { type: object, required: true, description: "X/Y Indents, Spacing, Rotation" }
+      remove_n: { type: integer, default: 1 }
+      method_type: { type: string, default: eh }
+      use_import: { type: integer, default: 0, description: "0=manual entry, 1=import file" }
+      t: { type: number, default: 2 }
+    typical_next: [start_test_normal]
+    notes: "Removes queued tests if requested, creates sample, applies method and array."
+
+  start_test_normal:
+    description: "Start the currently configured indentation test"
+    risk_level: medium
+    parameters:
+      t: { type: number, default: 2 }
+    prerequisites: [starting_tests]
+    typical_next: [get_current_sample_and_test_ocr_passive]
+    notes: "Only call after starting_tests has configured the array."
+
+  get_current_sample_and_test_ocr_passive:
+    description: "Read current test number without actively changing UI (poll progress)"
+    risk_level: read_only
+    parameters:
+      debug: { type: boolean, default: false }
+    notes: "Poll until test_number >= expected indent count before process_review_file."
+
+  get_xyz_positions:
+    description: "Read current stage X, Y position and extension"
+    risk_level: read_only
+    parameters: {}
+
+  get_all_ui_state:
+    description: "Read all available numeric UI state values"
+    risk_level: read_only
+    parameters: {}
+
+  capture_video_panel_remote:
+    description: "Capture microscope/video panel image on instrument computer"
+    risk_level: low
+    parameters: {}
+    typical_next: [move, starting_tests]
+    notes: "Download locally with client.download_file after capture."
+
+  process_review_file:
+    description: "Open ReviewData sample, recalculate, save, and export Excel/CSV"
+    risk_level: low
+    parameters:
+      sample_names: { type: array, required: true }
+      open_dir: { type: string, required: true }
+      current_sample_file_name: { type: string, required: true }
+      export_dir: { type: string, required: true }
+      export_file_name: { type: string, required: true }
+      review_changes: { type: object, required: true }
+      review_type: { type: string, default: eh }
+      export_format: { type: string, default: excel }
+      load_wait: { type: integer, default: 30 }
+      recalc_wait: { type: integer, default: 30 }
+      save_wait: { type: integer, default: 5 }
+    prerequisites: [start_test_normal]
+    notes: "Wait for indentation array to complete before calling."
+
+  align_focus:
+    description: "Create focus plane from three manually selected points; returns [a,b,c]"
+    risk_level: medium
+    parameters: {}
+    notes: "Operator-assisted calibration step."
+
+  focus:
+    description: "Compute and set extension from saved plane params at current XY"
+    risk_level: medium
+    parameters:
+      plane_params: { type: array, required: true, description: "[a, b, c] plane coefficients" }
+
+  restore_alignment:
+    description: "Restore macro-micro alignment object on server"
+    risk_level: low
+    parameters:
+      area_name: { type: string, required: true }
+      new_origin_macro: { type: array, required: true }
+      new_origin_micro: { type: array, required: true }
+      macro_scale_x: { type: number, required: true }
+      macro_scale_y: { type: number, required: true }
+      macro_image_path: { type: string, required: true }
+
+  move_to_aligned_point:
+    description: "Move to macro pixel coordinate using saved alignment; optional focus"
+    risk_level: low
+    parameters:
+      area_name: { type: string, required: true }
+      x: { type: number, required: true, description: "Macro pixel X" }
+      y: { type: number, required: true, description: "Macro pixel Y" }
+      plane_params: { type: array, required: false, description: "[a,b,c] for auto-focus after move" }
+    prerequisites: [restore_alignment]
+    typical_next: [capture_video_panel_remote, focus]

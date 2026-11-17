@@ -1,0 +1,132 @@
+Sample Characterization for Nanoindentation Studies
+===================================================
+
+SURFACE PREPARATION
+-------------------
+Quality surface preparation is critical for accurate nanoindentation:
+
+Metallographic preparation:
+1. Mounting: Cold-mount if heat-sensitive; hot-mount for routine work
+2. Grinding: Sequential grits (240 → 400 → 600 → 800 → 1200)
+3. Polishing: Diamond suspension (6 μm → 3 μm → 1 μm)
+4. Final polish: Colloidal silica (0.05 μm) or alumina
+5. Cleaning: Ultrasonic in ethanol, dry with compressed air
+
+Surface roughness requirements:
+- Ra < 5 nm: ideal for shallow indents (<200 nm)
+- Ra < 20 nm: acceptable for standard indents (200-1000 nm)
+- Ra < 100 nm: acceptable for deep indents (>1 μm)
+
+SAMPLE MOUNTING
+--------------
+For accurate indentation:
+- Rigid mounting required to prevent sample motion
+- Parallel surfaces essential for proper contact mechanics
+- Typical mounting options:
+  - Crystal bond wax: temperature sensitive, easy removal
+  - Cyanoacrylate (super glue): rigid, harder removal
+  - Double-sided tape: quick, but may introduce compliance
+
+Sample thickness considerations:
+- Minimum 10x maximum indent depth to avoid substrate effects
+- For 500 nm indents: sample or coating >5 μm thick
+- Thin films: use substrate correction methods
+
+MICROSTRUCTURE CHARACTERIZATION
+------------------------------
+Correlating indentation with microstructure requires:
+
+Optical microscopy:
+- Identify phase distributions, grain sizes
+- Mark reference points for indent location
+- Typical magnification: 50-500x for overview
+
+Scanning Electron Microscopy (SEM):
+- High resolution phase identification
+- EBSD for grain orientation mapping
+- EDS for compositional analysis
+- Correlate indent locations with microstructure
+
+Pre-test imaging strategy:
+1. Low magnification overview (100-200x)
+2. Identify regions of interest (phases, boundaries)
+3. Mark coordinates relative to fiducial markers
+4. Plan indent array positions
+
+THERMAL EFFECTS
+---------------
+Temperature influences measurements:
+- Thermal drift during measurement causes errors
+- Allow samples to equilibrate (30+ minutes)
+- Monitor ambient temperature stability (±0.5°C)
+- Use drift correction algorithms
+
+Elevated temperature testing:
+- Requires specialized heated stages
+- Account for tip thermal expansion
+- Material properties change with temperature
+
+ENVIRONMENTAL CONSIDERATIONS
+----------------------------
+Humidity effects:
+- High humidity can cause water meniscus at contact
+- Oxidation of fresh surfaces
+- Recommendation: RH 30-50% for most materials
+
+Vibration isolation:
+- Acoustic and mechanical vibrations cause noise
+- Use isolation tables for sub-100 nm indents
+- Night operation may have lower vibration
+
+MULTI-PHASE MATERIALS
+--------------------
+Challenges with heterogeneous samples:
+- Phase size vs indent size determines averaging
+- If phase size < 3x indent diameter: composite response
+- Target: phase size > 5x indent size for phase-specific H
+
+Identification strategies:
+- Pre-test SEM/optical imaging of phases
+- Etching to reveal microstructure
+- In-situ optical microscopy during indentation
+- Post-test SEM of indent locations
+
+Example phase size requirements:
+- For 1 μm deep indents with ~7 μm contact diameter:
+  - Phase size >35 μm for clean measurement
+  - Phase size <20 μm gives mixed response
+
+THIN FILM AND COATING ANALYSIS
+------------------------------
+Substrate influence rules:
+- Film properties dominate when h < 0.1t (h=depth, t=thickness)
+- Composite response when 0.1t < h < t
+- Substrate dominated when h > t
+
+Recommended practice:
+- Maximum indent depth: 10% of film thickness
+- For 1 μm film: maximum 100 nm indent depth
+- Use continuous stiffness measurement (CSM) for depth profiling
+
+Film-substrate systems to consider:
+- Soft film on hard substrate: pile-up likely
+- Hard film on soft substrate: sink-in likely, possible cracking
+- Similar modulus: smoother transition
+
+STATISTICAL SAMPLING
+-------------------
+Minimum indent requirements:
+- Homogeneous material: 5-10 indents
+- Phase-specific measurement: 10-15 per phase
+- Mapping heterogeneity: 25-100+ indents
+
+Sampling strategies:
+- Random sampling: unbiased property estimate
+- Grid sampling: spatial distribution mapping
+- Targeted sampling: specific features (boundaries, phases)
+
+Reporting guidelines:
+- State sample preparation method
+- Report number of indents and locations
+- Include uncertainty estimates
+- Note any anomalous indents excluded and reason

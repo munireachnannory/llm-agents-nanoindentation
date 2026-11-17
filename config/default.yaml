@@ -1,0 +1,198 @@
+# Nanoindentation Agent Default Configuration
+
+experiment:
+  name: nanoindent_experiment
+  max_iterations: 10
+  ic_max_cycles: 12
+  max_hypothesis_revisions: 3
+  min_hypothesis_critic_passes: 2
+  hypothesis_refresh_interval: 3
+  stall_threshold: 3
+  # Data collection goals
+  min_indent_arrays_for_confirmation: 2
+  min_visited_locations_for_confirmation: 3
+  min_instrument_actions_before_confirmation: 4
+  target_indent_count: 25
+  min_indents_before_conclude: 10
+  require_multiple_locations_for_confirmation: true
+
+memory:
+  base_dir: "./experiment_memory"
+  checkpoint_db: "checkpoints.sqlite"
+  store_db: "episodic_store.sqlite"
+
+instrument:
+  host: "127.0.0.1"
+  port: 5000
+  token: ""
+  timeout: 300
+  require_approval: true
+  # Set sim_mode: true and run `python scripts/run_sim_server.py` to test without hardware.
+  sim_mode: false
+
+indent_defaults:
+  method_type: "eh"
+  grid_nx: 2
+  grid_ny: 2
+  spacing_um: 15.0
+  rotation: 0.0
+  setup:
+    poisson: 0.3
+    metal: 0
+    drift: 0          # new add July 18,2027
+    "target load": 1000
+    "target depth": 1000
+    "surface approach distance": 2000
+    "surface approach velocity": 100
+    "strain rate": 0.2
+  review_changes:
+    "poissons ratio": 0.3
+    Drift: 0
+    "Min Depth for Results": 30
+    "Cite at Depth or Load": 0
+    "Stiffness for Contact": 50
+    "Depth to Cite Results (nm)": 250
+    "Metal : Pile up (0) or No Pile Up (1)": 0
+  # Per-feature method authority — see nanoindentation_agents/method.py.
+  # An `agent` mode is only exercised when the opt-in Measurement Strategy Agent
+  # below is enabled and returns a valid proposal; otherwise today's `default`
+  # value is retained. A `fixed` mode always retains its configured default.
+  # `agent_allowed: false` params can never be set to mode: agent (raises at
+  # config load) — approach distance/velocity (crash safety), poisson/metal/
+  # drift (material facts the agent cannot measure).
+  method_control:
+    control_mode: depth_controlled
+    control_mode_agent_selectable: false
+    derive_cite_depth: true
+    cite_depth_frac: 0.25
+    spacing_depth_multiplier: 20.0   # ISO 14577 practice; current 15um spacing at
+                                     # 1000nm depth is 15x -- confirm before Stage 4
+    params:
+      "target depth":
+        mode: agent
+        default: 1000
+        min: 100
+        max: 2000
+        candidates: [200, 300, 600, 1000, 1500, 2000]
+        units: nm
+        note: "Steel combinatorial library; grains ~5-20 um."
+      "target load":
+        mode: agent
+        default: 1000
+        min: 1
+        max: 1000
+        candidates: [200, 500, 1000]
+        units: mN
+        note: "Ceiling in depth-controlled mode; inForce1000 full scale is 1000 mN."
+      "surface approach distance":
+        mode: fixed
+        default: 2000
+        min: 2000
+        max: 5000
+        units: nm
+        agent_allowed: false      # SAFETY
+      "surface approach velocity":
+        mode: fixed
+        default: 100
+        units: nm/s
+        agent_allowed: false      # SAFETY
+      "strain rate":
+        mode: fixed
+        default: 0.2
+        min: 0.01
+        max: 1.0
+        units: "1/s"
+      poisson:
+        mode: fixed
+        default: 0.3
+        agent_allowed: false      # material constant
+      metal:
+        mode: fixed
+        default: 0
+        agent_allowed: false      # material behavior
+      drift:
+        mode: fixed
+        default: 0
+        agent_allowed: false
+
+# Optional per-site Measurement Strategy Agent. This is additive and ships
+# disabled, so existing campaigns still use the objective/grid defaults and the
+# method defaults above. Enabling it is not enough by itself: each feature also
+# needs mode: agent. Fixed features always ignore LLM proposals.
+measurement_strategy:
+  enabled: false
+  use_llm: true
+  llm_timeout_s: 60
+  min_confidence: 0.55
+  require_human_approval_for_agent_changes: true
+  site_action:
+    mode: fixed
+    default: indent
+    candidates: [indent, skip]
+    note: "Skip invalid, duplicate, or unnecessary sites to minimize indenter use."
+  method_type:
+    mode: fixed
+    default: eh
+    candidates: [eh]
+    note: "Only methods explicitly allow-listed by the operator may be selected."
+  grid_control:
+    params:
+      grid_nx:
+        mode: fixed
+        default: 2
+        min: 1
+        max: 5
+        candidates: [1, 2, 3, 4, 5]
+        units: count
+      grid_ny:
+        mode: fixed
+        default: 2
+        min: 1
+        max: 5
+        candidates: [1, 2, 3, 4, 5]
+        units: count
+      spacing_um:
+        mode: fixed
+        default: 15.0
+        min: 3.0
+        max: 100.0
+        candidates: [6.0, 10.0, 15.0, 20.0, 30.0]
+        units: um
+      rotation_deg:
+        mode: fixed
+        default: 0.0
+        min: -180.0
+        max: 180.0
+        candidates: [0.0, 45.0, 90.0]
+        units: deg
+
+graph:
+  profile: full
+  interrupt_nodes:
+    - user_approval
+  auto_approve_instruments: false
+
+literature:
+  # Backend: "local" for local files only, "manager" for online search (Crossref, arXiv, ChemRxiv)
+  backend: manager
+  local_dir: "./literature"
+  max_chunks: 8
+  # Enable online literature search (Crossref, arXiv, ChemRxiv, RSS feeds)
+  use_manager: true
+  manager_max_papers: 3
+  manager_max_candidates: 20
+  year_min: 2018
+  year_max: 2026
+  # Fall back to local files if online search fails or returns no results
+  fallback_to_local_files: true
+  # Optional RSS feeds for journal table of contents (leave empty to use defaults)
+  rss_feeds: []
+  rss_min_term_matches: 2
+
+routing:
+  force_hypothesis_approval_after_revisions: true
+
+langsmith:
+  enabled: false
+  project: nanoindent-agent
+  tracing_v2: true

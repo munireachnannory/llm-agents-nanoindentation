@@ -1,0 +1,32 @@
+# Core agent framework
+langgraph
+langgraph-checkpoint-sqlite
+langchain-core
+huggingface_hub
+pydantic
+pydantic-settings
+python-dotenv
+pyyaml
+requests
+
+# Science / analysis
+numpy
+scipy
+pandas
+scikit-learn
+matplotlib
+pillow
+openpyxl
+
+# Literature search
+feedparser
+
+# Simulator server
+flask
+
+# Notebooks
+ipython
+pytesseract  # optional: OCR screen-read fallback (also needs the Tesseract binary)
+
+# Tests
+pytest

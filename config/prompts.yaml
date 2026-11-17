@@ -1,0 +1,24 @@
+# Prompt Configuration for Nanoindentation Agent
+
+prompts:
+  roles:
+    hypothesis:
+      system_key: "hypothesis_system"
+      
+    supervisor:
+      system_key: "supervisor_system"
+      
+    instrument:
+      system_key: "instrument_system"
+      
+    measurement_critic:
+      system_key: "measurement_critic_system"
+      
+    hypothesis_critic:
+      system_key: "hypothesis_critic_system"
+      
+    literature:
+      system_key: "literature_system"
+      
+    image_analysis:
+      system_key: "image_analysis_system"

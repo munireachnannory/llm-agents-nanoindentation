@@ -1,0 +1,126 @@
+Nanoindentation: Fundamentals and Best Practices
+================================================
+
+MECHANICAL PROPERTY MEASUREMENT
+-------------------------------
+Nanoindentation is a technique for measuring local mechanical properties including:
+- Hardness (H): Resistance to plastic deformation, typically in GPa
+- Reduced modulus (Er) and Young's modulus (E): Elastic stiffness
+- Strain rate sensitivity and time-dependent properties
+
+For metals and alloys:
+- Hardness typically ranges 1-15 GPa depending on composition
+- Steel: H ~ 2-8 GPa, E ~ 200 GPa
+- Aluminum alloys: H ~ 0.5-2 GPa, E ~ 70 GPa
+- Nickel-based superalloys: H ~ 3-7 GPa, E ~ 180-220 GPa
+- Titanium alloys: H ~ 3-5 GPa, E ~ 100-120 GPa
+
+For ceramics and hard coatings:
+- Hardness typically 10-40 GPa
+- Diamond-like carbon: H ~ 20-80 GPa
+- TiN coatings: H ~ 20-25 GPa
+- Al2O3: H ~ 20-30 GPa
+
+INDENTATION SIZE EFFECT (ISE)
+-----------------------------
+At shallow indentation depths (<500 nm), measured hardness often increases with decreasing depth due to:
+- Strain gradient plasticity
+- Surface oxide layers
+- Polishing damage
+- Pile-up or sink-in effects
+
+Recommendation: Use depths >100 nm to minimize ISE artifacts; depths of 200-500 nm are typical for reliable bulk property measurement.
+
+SPACING REQUIREMENTS
+-------------------
+To avoid interaction between adjacent indentations:
+- Minimum spacing: 3-5x maximum indentation depth
+- For 500 nm deep indents: minimum 2.5-5 μm spacing
+- For 1 μm deep indents: minimum 5-10 μm spacing
+- Near grain boundaries: additional spacing may be needed
+
+Grid pattern considerations:
+- 5x5 grids with 5 μm spacing cover 20x20 μm areas
+- For phase mapping, align grids with microstructural features
+- Rotate grids to sample multiple grain orientations
+
+PHASE AND MICROSTRUCTURE EFFECTS
+--------------------------------
+Different phases exhibit distinct mechanical signatures:
+- Ferrite (α-Fe): H ~ 2-3 GPa, softer phase in steels
+- Martensite: H ~ 6-8 GPa, hard phase from rapid cooling
+- Pearlite: H ~ 3-4 GPa, lamellar ferrite + cementite
+- Austenite (γ): H ~ 2-4 GPa depending on composition
+
+Grain boundary effects:
+- Hardness often increases near grain boundaries (Hall-Petch)
+- Grain interiors may be 10-30% softer than boundaries
+- Triple junctions can show anomalous properties
+
+Precipitate effects:
+- Hard precipitates increase local hardness
+- Precipitate-free zones (PFZ) near boundaries can be softer
+
+EXPERIMENTAL DESIGN RECOMMENDATIONS
+-----------------------------------
+For hypothesis testing about spatial property variations:
+1. Conduct initial survey with coarse grid (10+ μm spacing)
+2. Identify regions of interest from optical/SEM images
+3. Fine grids in identified regions (3-5 μm spacing)
+4. Statistical analysis requires minimum 9-25 indents per region
+
+Expected property differences for confirmation:
+- Phase discrimination: >15-20% hardness difference
+- Grain boundary effects: >10% hardness variation
+- Composition gradients: continuous trends across positions
+
+Load selection guidelines:
+- Lower loads (1-5 mN): surface sensitivity, coating analysis
+- Medium loads (5-20 mN): bulk property, standard testing  
+- Higher loads (20-100 mN): averaging over microstructure
+
+COMMON EXPERIMENTAL HYPOTHESES
+------------------------------
+1. "Hardness varies spatially due to phase distribution"
+   - Test: Compare hardness in phase A vs phase B regions
+   - Success: Statistically significant H difference (t-test p<0.05)
+   - Failure: Uniform H regardless of location
+
+2. "Grain boundaries are mechanically distinct from grain interiors"
+   - Test: Indents at boundaries vs centers of grains
+   - Success: >10% H difference with consistent trend
+   - Failure: Random variation without boundary correlation
+
+3. "Compositional gradient causes property gradient"
+   - Test: Linear transect of indents across gradient
+   - Success: Monotonic H trend correlating with composition
+   - Failure: No correlation between position and properties
+
+4. "Heat treatment changed local mechanical response"
+   - Test: Compare same locations before/after treatment
+   - Success: Systematic H change in expected direction
+   - Failure: Changes within measurement uncertainty
+
+DATA INTERPRETATION
+------------------
+Sources of measurement uncertainty:
+- Instrument noise: typically ±2-5% for well-calibrated systems
+- Surface roughness: can cause 5-10% scatter
+- Tip wear: calibrate regularly with fused silica reference
+- Thermal drift: perform drift corrections, use temperature-stable environment
+
+Statistical recommendations:
+- Report mean ± standard deviation for each region
+- Compare regions using appropriate statistical tests
+- Consider coefficient of variation (CV) for relative comparison
+- CV < 5%: highly uniform material
+- CV 5-10%: typical polycrystalline variation
+- CV > 15%: significant microstructural heterogeneity
+
+REFERENCES
+----------
+Oliver, W.C. & Pharr, G.M. (1992). Measurement of hardness and elastic modulus by instrumented indentation. J. Mater. Res. 7(6): 1564-1583.
+
+Fischer-Cripps, A.C. (2011). Nanoindentation, 3rd Ed. Springer.
+
+ISO 14577:2015 - Metallic materials - Instrumented indentation test for hardness and materials parameters.
